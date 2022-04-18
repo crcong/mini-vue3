@@ -1,0 +1,39 @@
+{
+  "name": "mini-vue3",
+  "version": "0.0.0",
+  "description": "a toy about learning vue3",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "packageManager": "pnpm@6.32.3",
+  "homepage": "",
+  "bugs": {
+    "url": "https://github.com/crcong/mini-vue3/issues"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsup src/index.ts --watch --format esm,cjs",
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "test": "vitest"
+  },
+  "sideEffects": false,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@crcong/eslint-config-typescript": "^0.2.0",
+    "eslint": "^8.11.0",
+    "tsup": "^5.12.1",
+    "typescript": "^4.6.2",
+    "vitest": "^0.7.6"
+  }
+}
