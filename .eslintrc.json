@@ -1,3 +1,6 @@
 {
-  "extends": "@crcong/eslint-config-typescript"
+  "extends": "@crcong/eslint-config-typescript",
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off"
+  }
 }
