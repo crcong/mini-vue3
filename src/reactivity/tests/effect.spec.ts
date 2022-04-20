@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, fn } from 'vitest'
 import { effect } from '../effect'
 import { reactive } from '../reactive'
 
@@ -43,5 +43,36 @@ describe('reactivity/effect', () => {
     expect(dummy).toBe('value')
     obj.prop = 'World'
     expect(dummy).toBe('World')
+  })
+
+  it('scheduler', () => {
+    let dummy
+    let run: any
+    const scheduler = fn(() => {
+      run = runner
+    })
+    const obj = reactive({ foo: 1 })
+    const runner = effect(
+      () => {
+        dummy = obj.foo
+      },
+      { scheduler },
+    )
+    // 执行 effect 不会执行 scheduler
+    expect(scheduler).not.toHaveBeenCalled()
+    expect(dummy).toBe(1)
+
+    // 数据变更后不执行 effect fn , 执行 scheduler
+    // should be called on first trigger
+    obj.foo++
+    expect(scheduler).toHaveBeenCalledTimes(1)
+    // should not run yet
+    expect(dummy).toBe(1)
+
+    // 执行 runner , 会执行 effect fn
+    // manually run
+    run()
+    // should have run
+    expect(dummy).toBe(2)
   })
 })
