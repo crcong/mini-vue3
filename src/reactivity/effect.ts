@@ -2,8 +2,12 @@ let activeEffect
 
 class ReactiveEffect {
   fn: any
+  deps = []
+  isActive = true
+  scheduler?: () => void
+  onStop?: () => void
 
-  constructor(fn, public scheduler?) {
+  constructor(fn) {
     this.fn = fn
   }
 
@@ -11,6 +15,20 @@ class ReactiveEffect {
     activeEffect = this
     return this.fn()
   }
+
+  stop() {
+    if (this.isActive) {
+      cleanupEffect(this)
+      this.onStop?.()
+      this.isActive = false
+    }
+  }
+}
+
+function cleanupEffect(effect) {
+  effect.deps.forEach((dep: any) => {
+    dep.delete(effect)
+  })
 }
 
 const targetMap = new Map()
@@ -29,7 +47,7 @@ export function track(target, key) {
     dep = new Set()
     depsMap.set(key, dep)
   }
-
+  activeEffect.deps.push(dep)
   dep.add(activeEffect)
 }
 
@@ -54,10 +72,19 @@ export function trigger(target, key) {
 }
 
 export function effect(fn, options = {} as any) {
-  const { scheduler } = options
-  const _effect = new ReactiveEffect(fn, scheduler)
+  const _effect: any = new ReactiveEffect(fn)
 
-  _effect.run()
+  // FIXME: refactor utils to shared package
+  Object.assign(_effect, options)
 
-  return _effect.run.bind(_effect)
+  const runner = _effect.run.bind(_effect)
+  runner.effect = _effect
+
+  runner()
+
+  return runner
+}
+
+export function stop(runner) {
+  runner.effect.stop()
 }
