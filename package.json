@@ -23,6 +23,7 @@
   "scripts": {
     "dev": "tsup src/index.ts --watch --format esm,cjs",
     "build": "tsup src/index.ts --dts --format esm,cjs",
+    "lint": "eslint --fix ./src",
     "test": "vitest"
   },
   "sideEffects": false,

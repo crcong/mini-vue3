@@ -1,4 +1,4 @@
-import { describe, expect, it, fn } from 'vitest'
+import { describe, expect, fn, it } from 'vitest'
 import { effect, stop } from '../effect'
 import { reactive } from '../reactive'
 
@@ -95,8 +95,7 @@ describe('reactivity/effect', () => {
 
   it('events: onStop', () => {
     const onStop = fn()
-    // FIXME: eslint rule
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+
     const runner = effect(() => {}, {
       onStop,
     })
