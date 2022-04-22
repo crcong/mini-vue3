@@ -30,7 +30,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@crcong/eslint-config-typescript": "^0.2.0",
+    "@crcong/eslint-config-typescript": "^0.3.0",
     "eslint": "^8.11.0",
     "tsup": "^5.12.1",
     "typescript": "^4.6.2",
