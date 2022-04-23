@@ -30,7 +30,8 @@ const readonlyGet = createGetter(true)
 
 export const readonlyHandler = {
   get: readonlyGet,
-  set() {
+  set(_, key) {
+    console.warn(`Set operation on key "${key}" failed: target is readonly.`)
     return true
   },
 }
