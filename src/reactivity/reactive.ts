@@ -14,3 +14,15 @@ export function reactive(row) {
     },
   })
 }
+
+export function readonly(raw) {
+  return new Proxy(raw, {
+    get(target, key) {
+      const result = Reflect.get(target, key)
+      return result
+    },
+    set() {
+      return true
+    },
+  })
+}
