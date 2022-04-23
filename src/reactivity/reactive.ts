@@ -11,3 +11,11 @@ export function reactive(target) {
 export function readonly(target) {
   return createReactiveObject(target, readonlyHandler)
 }
+
+export const enum ReactiveFlags {
+  IS_REACTIVE = '__v_isReactive',
+}
+
+export function isReactive(target) {
+  return Boolean(target[ReactiveFlags.IS_REACTIVE])
+}
