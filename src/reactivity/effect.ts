@@ -1,3 +1,5 @@
+import { extend } from '../shared'
+
 let activeEffect
 
 class ReactiveEffect {
@@ -74,8 +76,7 @@ export function trigger(target, key) {
 export function effect(fn, options = {} as any) {
   const _effect: any = new ReactiveEffect(fn)
 
-  // FIXME: refactor utils to shared package
-  Object.assign(_effect, options)
+  extend(_effect, options)
 
   const runner = _effect.run.bind(_effect)
   runner.effect = _effect
