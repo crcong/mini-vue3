@@ -1,7 +1,7 @@
 import { describe, expect, fn, it } from 'vitest'
-import { readonly } from '../reactive'
+import { isReadonly, readonly } from '../reactive'
 
-describe('readonly', () => {
+describe('reactivity/readonly', () => {
   it('basic', () => {
     const original = { foo: 1, bar: { baz: 2 } }
     const wrapped = readonly(original)
@@ -20,5 +20,12 @@ describe('readonly', () => {
 
     expect(console.warn).toHaveBeenCalledTimes(1)
     expect(wrapped.foo).toBe(1)
+  })
+
+  it('isReadonly', () => {
+    const original = { foo: 1 }
+    const observed = readonly(original)
+    expect(isReadonly(observed)).toBe(true)
+    expect(isReadonly(original)).toBe(false)
   })
 })

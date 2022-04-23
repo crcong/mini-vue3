@@ -5,7 +5,10 @@ function createGetter(readonly = false) {
   return function get(target, key) {
     if (key === ReactiveFlags.IS_REACTIVE) {
       return !readonly
+    } else if (key === ReactiveFlags.IS_READONLY) {
+      return readonly
     }
+
     const result = Reflect.get(target, key)
     if (!readonly) {
       track(target, key)
