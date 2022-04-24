@@ -1,16 +1,23 @@
+import { isObject } from '../shared'
 import { track, trigger } from './effect'
-import { ReactiveFlags } from './reactive'
+import { ReactiveFlags, reactive, readonly } from './reactive'
 
-function createGetter(readonly = false) {
+function createGetter(isReadonly = false) {
   return function get(target, key) {
     if (key === ReactiveFlags.IS_REACTIVE) {
-      return !readonly
+      return !isReadonly
     } else if (key === ReactiveFlags.IS_READONLY) {
-      return readonly
+      return isReadonly
     }
 
     const result = Reflect.get(target, key)
-    if (!readonly) {
+
+    // Also need to lazy access readonly and reactive here to avoid circular dependency.
+    if (isObject(result)) {
+      return isReadonly ? readonly(result) : reactive(result)
+    }
+
+    if (!isReadonly) {
       track(target, key)
     }
     return result
