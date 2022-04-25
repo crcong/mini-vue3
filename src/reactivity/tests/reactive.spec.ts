@@ -30,4 +30,16 @@ describe('reactivity/reactive', () => {
     expect(isReactive(observed.array)).toBe(true)
     expect(isReactive(observed.array[0])).toBe(true)
   })
+
+  it('get same nested object need return save proxy', () => {
+    const original = {
+      nested: {
+        foo: 1,
+      },
+      array: [{ bar: 2 }],
+    }
+
+    const observed = reactive(original)
+    expect(observed.nested).toBe(observed.nested)
+  })
 })

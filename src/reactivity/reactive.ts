@@ -1,7 +1,15 @@
 import { mutableHandler, readonlyHandler } from './baseHandlers'
 
+const proxyMap = new WeakMap()
+
 function createReactiveObject(target, handler) {
-  return new Proxy(target, handler)
+  const existingProxy = proxyMap.get(target)
+  if (existingProxy) {
+    return existingProxy
+  }
+  const proxy = new Proxy(target, handler)
+  proxyMap.set(target, proxy)
+  return proxy
 }
 
 export function reactive(target) {
