@@ -21,6 +21,8 @@ class ReactiveEffect {
     shouldTrack = true
     activeEffect = this
 
+    cleanupEffect(this)
+
     const result = this.fn()
 
     // reset
@@ -85,7 +87,8 @@ export function trigger(target, key) {
     return
   }
 
-  for (const effect of deps) {
+  const newDeps: any = new Set(deps)
+  for (const effect of newDeps) {
     if (effect.scheduler) {
       effect.scheduler()
     } else {

@@ -120,4 +120,34 @@ describe('reactivity/effect', () => {
     stop(runner)
     expect(onStop).toHaveBeenCalled()
   })
+
+  it('should cleanup effect before run effect function', () => {
+    let dummy
+    const obj = reactive({ a: 1, isOk: true })
+    const effectFn = fn(() => {
+      dummy = obj.isOk ? obj.a : 'notOk'
+    })
+    effect(effectFn)
+    expect(dummy).toBe(1)
+    expect(effectFn).toHaveBeenCalledTimes(1)
+
+    obj.a = 2
+    expect(effectFn).toHaveBeenCalledTimes(2)
+
+    obj.isOk = false
+    expect(effectFn).toHaveBeenCalledTimes(3)
+    expect(dummy).toBe('notOk')
+
+    // notice that: need cleanup effects, collect effect again
+    obj.a = 2
+    expect(effectFn).toHaveBeenCalledTimes(3)
+    expect(dummy).toBe('notOk')
+
+    obj.isOk = true
+    expect(effectFn).toHaveBeenCalledTimes(4)
+
+    obj.a = 3
+    expect(effectFn).toHaveBeenCalledTimes(5)
+    expect(dummy).toBe(3)
+  })
 })
