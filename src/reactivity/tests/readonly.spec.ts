@@ -1,5 +1,5 @@
 import { describe, expect, fn, it } from 'vitest'
-import { isReadonly, readonly } from '../reactive'
+import { isProxy, isReadonly, readonly } from '../reactive'
 
 describe('reactivity/readonly', () => {
   it('basic', () => {
@@ -28,5 +28,13 @@ describe('reactivity/readonly', () => {
     expect(isReadonly(wrapped)).toBe(true)
     expect(isReadonly(original)).toBe(false)
     expect(isReadonly(wrapped.bar)).toBe(true)
+  })
+
+  it('isReadonly isProxy', () => {
+    const original = { foo: 1, bar: { baz: 2 } }
+    const wrapped = readonly(original)
+    expect(wrapped).not.toBe(original)
+
+    expect(isProxy(wrapped)).toBe(true)
   })
 })

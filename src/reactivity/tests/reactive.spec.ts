@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isReactive, reactive } from '../reactive'
+import { isProxy, isReactive, reactive } from '../reactive'
 
 describe('reactivity/reactive', () => {
   it('basic', () => {
@@ -41,5 +41,17 @@ describe('reactivity/reactive', () => {
 
     const observed = reactive(original)
     expect(observed.nested).toBe(observed.nested)
+  })
+
+  it('reactive isProxy', () => {
+    const original = {
+      nested: {
+        foo: 1,
+      },
+      array: [{ bar: 2 }],
+    }
+    const observed = reactive(original)
+
+    expect(isProxy(observed)).toBe(true)
   })
 })
