@@ -113,7 +113,7 @@ describe('reactivity/effect', () => {
   it('events: onStop', () => {
     const onStop = fn()
 
-    const runner = effect(() => {}, {
+    const runner = effect(() => { }, {
       onStop,
     })
 
@@ -216,5 +216,10 @@ describe('reactivity/effect', () => {
     expect(dummy).toEqual({ num1: 4, num2: 10, num3: 7 })
     expect(parentSpy).toHaveBeenCalledTimes(3)
     expect(childSpy).toHaveBeenCalledTimes(5)
+  })
+
+  it('avoid Infinite loop', () => {
+    const obj = reactive({ foo: 1 })
+    effect(() => obj.foo++)
   })
 })

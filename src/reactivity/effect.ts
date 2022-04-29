@@ -92,7 +92,13 @@ export function trigger(target, key) {
     return
   }
 
-  const newDeps: any = new Set(deps)
+  const newDeps: any = new Set()
+  for (const dep of deps) {
+    if (dep !== activeEffect) {
+      newDeps.add(dep)
+    }
+  }
+
   for (const effect of newDeps) {
     if (effect.scheduler) {
       effect.scheduler()
