@@ -150,4 +150,71 @@ describe('reactivity/effect', () => {
     expect(effectFn).toHaveBeenCalledTimes(5)
     expect(dummy).toBe(3)
   })
+
+  it('nested effect', () => {
+    const obj = reactive({
+      foo: 1,
+      bar: 2,
+    })
+
+    let outerFoo
+    let outerBar
+    const fn1 = fn()
+    const fn2 = fn()
+
+    effect(() => {
+      effect(() => {
+        fn2()
+        outerBar = obj.bar
+      })
+      fn1()
+      outerFoo = obj.foo
+    })
+
+    expect(fn1).toBeCalledTimes(1)
+    expect(fn2).toBeCalledTimes(1)
+    expect(outerFoo).toBe(1)
+    expect(outerBar).toBe(2)
+    obj.bar = 4
+    expect(fn2).toBeCalledTimes(2)
+    expect(outerBar).toBe(4)
+
+    obj.foo = 3
+    expect(fn1).toBeCalledTimes(2)
+    expect(outerFoo).toBe(3)
+    expect(fn2).toBeCalledTimes(3)
+  })
+
+  it('should allow nested effects', () => {
+    const numbers = reactive({ num1: 0, num2: 1, num3: 2 })
+    const dummy: any = {}
+
+    const childSpy = fn(() => (dummy.num1 = numbers.num1))
+    const childEffect = effect(childSpy)
+    const parentSpy = fn(() => {
+      dummy.num2 = numbers.num2
+      childEffect()
+      dummy.num3 = numbers.num3
+    })
+    effect(parentSpy)
+
+    expect(dummy).toEqual({ num1: 0, num2: 1, num3: 2 })
+    expect(parentSpy).toHaveBeenCalledTimes(1)
+    expect(childSpy).toHaveBeenCalledTimes(2)
+    // this should only call the childEffect
+    numbers.num1 = 4
+    expect(dummy).toEqual({ num1: 4, num2: 1, num3: 2 })
+    expect(parentSpy).toHaveBeenCalledTimes(1)
+    expect(childSpy).toHaveBeenCalledTimes(3)
+    // this calls the parentEffect, which calls the childEffect once
+    numbers.num2 = 10
+    expect(dummy).toEqual({ num1: 4, num2: 10, num3: 2 })
+    expect(parentSpy).toHaveBeenCalledTimes(2)
+    expect(childSpy).toHaveBeenCalledTimes(4)
+    // this calls the parentEffect, which calls the childEffect once
+    numbers.num3 = 7
+    expect(dummy).toEqual({ num1: 4, num2: 10, num3: 7 })
+    expect(parentSpy).toHaveBeenCalledTimes(3)
+    expect(childSpy).toHaveBeenCalledTimes(5)
+  })
 })

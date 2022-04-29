@@ -1,5 +1,6 @@
 import { extend } from '../shared'
 
+const effectStack: any = []
 let activeEffect
 let shouldTrack = false
 
@@ -20,10 +21,14 @@ class ReactiveEffect {
     }
     shouldTrack = true
     activeEffect = this
+    effectStack.push(activeEffect)
 
     cleanupEffect(this)
 
     const result = this.fn()
+
+    effectStack.pop()
+    activeEffect = effectStack[effectStack.length - 1]
 
     // reset
     shouldTrack = false
@@ -52,7 +57,7 @@ function isTracking() {
 
 const targetMap = new Map()
 export function track(target, key) {
-  if (!isTracking()) {
+  if (!isTracking() && effectStack.length === 0) {
     return
   }
 
