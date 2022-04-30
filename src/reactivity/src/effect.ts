@@ -51,7 +51,7 @@ function cleanupEffect(effect) {
   effect.deps.length = 0
 }
 
-function isTracking() {
+export function isTracking() {
   return activeEffect !== undefined && shouldTrack === true
 }
 
@@ -73,10 +73,13 @@ export function track(target, key) {
     depsMap.set(key, dep)
   }
 
+  trackEffects(dep)
+}
+
+export function trackEffects(dep) {
   if (dep.has(activeEffect)) {
     return
   }
-
   dep.add(activeEffect)
   activeEffect.deps.push(dep)
 }
@@ -87,19 +90,23 @@ export function trigger(target, key) {
     return
   }
 
-  const deps = depsMap.get(key)
-  if (!deps) {
+  const dep = depsMap.get(key)
+  triggerEffects(dep)
+}
+
+export function triggerEffects(dep) {
+  if (!dep) {
     return
   }
 
-  const newDeps: any = new Set()
-  for (const dep of deps) {
-    if (dep !== activeEffect) {
-      newDeps.add(dep)
+  const newDep: any = new Set()
+  for (const effect of dep) {
+    if (effect !== activeEffect) {
+      newDep.add(effect)
     }
   }
 
-  for (const effect of newDeps) {
+  for (const effect of newDep) {
     if (effect.scheduler) {
       effect.scheduler()
     } else {
