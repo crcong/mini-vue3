@@ -43,3 +43,7 @@ export function ref(target) {
 export function isRef(r) {
   return Boolean(r && r.__v_isRef === true)
 }
+
+export function unref(r) {
+  return isRef(r) ? r.value : r
+}
