@@ -14,12 +14,12 @@ function convert(value) {
 
 class RefImpl {
   private _value: any
-  public dep: Set<any>
+  public dep = new Set()
+  public __v_isRef = true
   private _rawValue: any
   constructor(value) {
     this._rawValue = value
     this._value = convert(value)
-    this.dep = new Set()
   }
 
   public get value() {
@@ -38,4 +38,8 @@ class RefImpl {
 
 export function ref(target) {
   return new RefImpl(target)
+}
+
+export function isRef(r) {
+  return Boolean(r && r.__v_isRef === true)
 }
