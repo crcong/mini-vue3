@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isProxy, isReactive, reactive } from '../reactive'
+import { isProxy, isReactive, reactive } from '../src/reactive'
 
 describe('reactivity/reactive', () => {
   it('basic', () => {

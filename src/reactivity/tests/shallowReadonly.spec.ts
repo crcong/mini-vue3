@@ -1,5 +1,5 @@
 import { describe, expect, fn, it } from 'vitest'
-import { isReadonly, shallowReadonly } from '../reactive'
+import { isReadonly, shallowReadonly } from '../src/reactive'
 
 describe('reactivity/readonly', () => {
   it('basic', () => {
