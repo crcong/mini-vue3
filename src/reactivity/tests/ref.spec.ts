@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { effect } from '../src/effect'
-import { isRef, ref, unref } from '../src/ref'
+import { isRef, proxyRefs, ref, unref } from '../src/ref'
 
 describe('reactive/ref', () => {
   it('should hold a value', () => {
@@ -53,5 +53,29 @@ describe('reactive/ref', () => {
     expect(isRef(1)).toBe(false)
     // an object that looks like a ref isn't necessarily a ref
     expect(isRef({ value: 0 })).toBe(false)
+  })
+
+  it('proxyRefs', () => {
+    const foo = {
+      bar: ref(1),
+      foo: 2,
+    }
+
+    const proxyFoo = proxyRefs(foo)
+    expect(proxyFoo.bar).toBe(1)
+    expect(foo.bar.value).toBe(1)
+    expect(proxyFoo.foo).toBe(2)
+    expect(foo.foo).toBe(2)
+
+    proxyFoo.bar = 2
+    expect(proxyFoo.bar).toBe(2)
+    expect(foo.bar.value).toBe(2)
+
+    proxyFoo.foo = 3
+    expect(proxyFoo.foo).toBe(3)
+
+    proxyFoo.bar = ref(4)
+    expect(proxyFoo.bar).toBe(4)
+    expect(foo.bar.value).toBe(4)
   })
 })
