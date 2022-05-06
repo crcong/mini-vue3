@@ -4,15 +4,16 @@ const effectStack: any = []
 let activeEffect
 let shouldTrack = false
 
-class ReactiveEffect {
+export class ReactiveEffect {
   fn: any
   deps = []
   isActive = true
   scheduler?: () => void
   onStop?: () => void
 
-  constructor(fn) {
+  constructor(fn, scheduler?) {
     this.fn = fn
+    this.scheduler = scheduler
   }
 
   run() {

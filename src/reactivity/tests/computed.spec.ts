@@ -1,0 +1,42 @@
+/* eslint-disable no-unused-expressions */
+import { describe, expect, fn, it } from 'vitest'
+import { computed } from '../src/computed'
+import { reactive } from '../src/reactive'
+
+describe('reactive/computed', () => {
+  it('should return updated value', () => {
+    const value = reactive({})
+    const cValue = computed(() => value.foo)
+    expect(cValue.value).toBe(undefined)
+    value.foo = 1
+    expect(cValue.value).toBe(1)
+  })
+
+  it('should compute lazily', () => {
+    const value = reactive({})
+    const getter = fn(() => value.foo)
+    const cValue = computed(getter)
+
+    // lazy
+    expect(getter).not.toHaveBeenCalled()
+
+    expect(cValue.value).toBe(undefined)
+    expect(getter).toHaveBeenCalledTimes(1)
+
+    // should not compute again
+    cValue.value
+    expect(getter).toHaveBeenCalledTimes(1)
+
+    // should not compute until needed
+    value.foo = 1
+    expect(getter).toHaveBeenCalledTimes(1)
+
+    // now it should compute
+    expect(cValue.value).toBe(1)
+    expect(getter).toHaveBeenCalledTimes(2)
+
+    // should not compute again
+    cValue.value
+    expect(getter).toHaveBeenCalledTimes(2)
+  })
+})
