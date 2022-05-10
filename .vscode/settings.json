@@ -4,5 +4,8 @@
   },
   "github.copilot.enable": {
     "*": false,
-  }
+  },
+  "cSpell.words": [
+    "vnode"
+  ]
 }
