@@ -40,15 +40,16 @@ function processComponent(vnode, container) {
   mountComponent(vnode, container)
 }
 
-function mountComponent(vnode, container) {
-  const instance = createComponentInstance(vnode)
+function mountComponent(initialVNode, container) {
+  const instance = createComponentInstance(initialVNode)
 
   setupComponent(instance)
-  setupRenderEffect(instance, container)
+  setupRenderEffect(instance, initialVNode, container)
 }
 
-function setupRenderEffect(instance, container) {
-  const subtree = instance.render.call(instance.setupState)
+function setupRenderEffect(instance, initialVNode, container) {
+  const { render, proxy } = instance
+  const subtree = render.call(proxy)
 
   patch(subtree, container)
 }
