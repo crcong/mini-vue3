@@ -9,7 +9,7 @@ export const App = {
         style: 'color: red;',
       },
       [
-        h('span', { class: 'span' }, `hi, ${this.msg}`),
+        h('span', { class: 'span' }, `hi, ${this.msg}, $el: ${this.$el}`),
         h('a', { href: 'https://v3.cn.vuejs.org/', target: '_blank' }, 'vue3中文文档'),
       ],
     )

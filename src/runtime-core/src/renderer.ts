@@ -14,7 +14,7 @@ function patch(vnode, container) {
 }
 
 function processElement(vnode, container) {
-  const el = document.createElement(vnode.type)
+  const el = vnode.el = document.createElement(vnode.type)
 
   const { children, props = {} } = vnode
   if (typeof children === 'string') {
@@ -52,4 +52,6 @@ function setupRenderEffect(instance, initialVNode, container) {
   const subtree = render.call(proxy)
 
   patch(subtree, container)
+
+  initialVNode.el = subtree.el
 }
