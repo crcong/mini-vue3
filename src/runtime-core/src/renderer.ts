@@ -1,3 +1,4 @@
+import { isOn } from '../../shared'
 import { ShapeFlags } from '../../shared/ShapeFlags'
 import { createComponentInstance, setupComponent } from './component'
 
@@ -27,7 +28,13 @@ function processElement(vnode, container) {
   for (const k in props) {
     if (Object.prototype.hasOwnProperty.call(props, k)) {
       const p = props[k]
-      el.setAttribute(k, p)
+
+      // native events, TODO: bind context
+      if (isOn(k)) {
+        el.addEventListener(k.slice(2).toLocaleLowerCase(), p)
+      } else {
+        el.setAttribute(k, p)
+      }
     }
   }
   container.append(el)

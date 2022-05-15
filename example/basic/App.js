@@ -7,6 +7,9 @@ export const App = {
       {
         class: 'app',
         style: 'color: red;',
+        onClick() {
+          console.warn('click')
+        },
       },
       [
         h('span', { class: 'span' }, `hi, ${this.msg}, $el: ${this.$el}`),
