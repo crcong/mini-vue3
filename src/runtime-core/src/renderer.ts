@@ -51,7 +51,7 @@ function processComponent(vnode, container) {
 function mountComponent(initialVNode, container) {
   const instance = createComponentInstance(initialVNode)
 
-  setupComponent(instance)
+  setupComponent(instance, initialVNode)
   setupRenderEffect(instance, initialVNode, container)
 }
 
