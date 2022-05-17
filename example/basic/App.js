@@ -15,7 +15,18 @@ export const App = {
       [
         h('span', { class: 'span' }, `hi, ${this.msg}, $el: ${this.$el}`),
         h('a', { href: 'https://v3.cn.vuejs.org/', target: '_blank' }, 'vue3中文文档'),
-        h(Foo, { value: 333 }),
+        h(
+          Foo,
+          {
+            value: 333,
+            onAdd(...args) {
+              console.log('call onAdd good!!', args)
+            },
+            onAddFooFn(...args) {
+              console.log('call onFooFn good!!', args)
+            },
+          },
+        ),
       ],
     )
   },
