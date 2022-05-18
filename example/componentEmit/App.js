@@ -19,6 +19,12 @@ export const App = {
           Foo,
           {
             value: 333,
+            onAdd(...args) {
+              console.log('call onAdd good!!', args)
+            },
+            onAddFooFn(...args) {
+              console.log('call onFooFn good!!', args)
+            },
           },
         ),
       ],

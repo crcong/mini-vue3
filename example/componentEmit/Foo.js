@@ -2,9 +2,19 @@ import { h } from '../../dist/index.mjs'
 
 export default {
   name: 'Foo',
-  setup(props) {
+  setup(props, { emit }) {
     console.log(props)
     props.value = 11
+
+    function emitTestFn() {
+      emit('add', 1, 2)
+
+      emit('add-foo-fn', 3, 4)
+    }
+
+    return {
+      emitTestFn,
+    }
   },
   render() {
     return h(
