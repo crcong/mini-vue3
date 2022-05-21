@@ -7,8 +7,8 @@ export const App = {
     const app = h('div', {}, 'App')
 
     const bar = h(Bar, {}, {
-      header: h('p', {}, 'header'),
-      footer: h('p', {}, 'footer'),
+      header: ({ name }) => h('p', {}, `header, my name is ${name}`),
+      footer: ({ age }) => h('p', {}, `footer, my age is ${age}`),
     })
 
     return h('div', {}, [app, bar])

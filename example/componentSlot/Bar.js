@@ -8,10 +8,12 @@ export default {
   render() {
     const bar = h('p', {}, 'bar center')
 
+    const age = 17
+    const name = 'crcong'
     return h('div', {}, [
-      renderSlots(this.$slot, 'header'),
+      renderSlots(this.$slot, 'header', { name }),
       bar,
-      renderSlots(this.$slot, 'footer'),
+      renderSlots(this.$slot, 'footer', { age }),
     ])
   },
 }

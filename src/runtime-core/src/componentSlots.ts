@@ -1,14 +1,17 @@
 import { hasOwn } from '../../shared'
+import { ShapeFlags } from '../../shared/ShapeFlags'
 
 export function initSlots(instance, children) {
-  normalizeObjectSlots(children, instance.slots)
+  if (instance.vnode.shapeFlag & ShapeFlags.SLOT_CHILDREN) {
+    normalizeObjectSlots(children, instance.slots)
+  }
 }
 
 function normalizeObjectSlots(children, slots) {
   for (const key in children) {
     if (hasOwn(children, key)) {
       const value = children[key]
-      slots[key] = normalizeSlotValue(value)
+      slots[key] = (props) => normalizeSlotValue(value(props))
     }
   }
 }
