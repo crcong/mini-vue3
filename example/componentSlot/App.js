@@ -1,4 +1,4 @@
-import { h } from '../../dist/index.mjs'
+import { createTextNode, h } from '../../dist/index.mjs'
 import Bar from './Bar.js'
 
 export const App = {
@@ -8,7 +8,7 @@ export const App = {
 
     const bar = h(Bar, {}, {
       header: ({ name }) => h('p', {}, `header, my name is ${name}`),
-      footer: ({ age }) => h('p', {}, `footer, my age is ${age}`),
+      footer: ({ age }) => [h('p', {}, `footer, my age is ${age}`), createTextNode('this is text create by createTextNode')],
     })
 
     return h('div', {}, [app, bar])
